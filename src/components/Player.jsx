@@ -24,12 +24,19 @@ const Player = ({
   const handlePlayPause = () => {
     if (isPlaying) {
       audioRef.current.pause();
+      saveCurrentMusicTime({
+        id: audioTime.id,
+        audioTime: audioRef.current.currentTime,
+      });
       setIsPlaying(false);
     } else {
       audioRef.current.play();
       setIsPlaying(true);
       console.log(audioSrc);
-      saveCurrentMusic(audioSrc.id, audioSrc.audioBlob);
+      saveCurrentMusic({
+        id: audioSrc.id,
+        audioBlob: audioSrc.audioBlob,
+      });
     }
     setIsPlaying(!isPlaying);
   };
@@ -52,11 +59,15 @@ const Player = ({
 
     const handleTimeUpdate = () => {
       setCurrentTime(audioElement.currentTime);
-      saveCurrentMusicTime(audioSrc.id, audioElement.currentTime);
+      saveCurrentMusicTime({
+        id: audioTime.id,
+        audioTime: audioElement.currentTime,
+      });
     };
 
     const handleLoadedMetadata = () => {
       setDuration(audioElement.duration);
+      audioElement.currentTime = audioTime.audioTime;
     };
 
     audioElement.addEventListener("timeupdate", handleTimeUpdate);

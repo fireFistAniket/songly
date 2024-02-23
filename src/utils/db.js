@@ -56,56 +56,31 @@ export const saveAudio = (db, audioBlob) => {
   });
 };
 
-export const saveCurrentAudio = (db, id, audioId) => {
+export const saveCurrentAudio = (db, audioBlob) => {
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(CURRENT_AUDIO_NAME, "readwrite");
     const store = transaction.objectStore(CURRENT_AUDIO_NAME);
     // store.clear();
-    const current = store.getAll();
-    let request;
-    current.onsuccess = () => {
-      if (current.result && current.result.length > 0) {
-        request = store.put(audioId, id);
-      } else {
-       request = store.add({ audioId });
-      }
-      request.onsuccess = () => {
-        resolve(request.result);
-      };
-      request.onerror = () => {
-        reject(request.error);
-      };
+    const request = store.put(audioBlob);
+    request.onsuccess = () => {
+      resolve(request.result);
     };
-
-    current.onerror = () => {
-      reject(current.error);
+    request.onerror = () => {
+      reject(request.error);
     };
   });
 };
 
-export const saveCurrentAudioTimer = (db, id, audioTime) => {
+export const saveCurrentAudioTimer = (db, audioTime) => {
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(CURRENT_AUDIO_TIME, "readwrite");
     const store = transaction.objectStore(CURRENT_AUDIO_TIME);
-    const current = store.getAll();
-    let request;
-    current.onsuccess = () => {
-      if (current.result && current.result.length > 0) {
-        request = store.put(audioTime, id);
-      } else {
-        request = store.add({ audioTime });
-      }
-      request.onsuccess = () => {
-        resolve(request.result);
-      };
-      request.onerror = () => {
-        reject(request.error);
-      };
+    const request = store.put(audioTime);
+    request.onsuccess = () => {
+      resolve(request.result);
     };
-    // store.clear();
-
-    current.onerror = () => {
-      reject(current.error);
+    request.onerror = () => {
+      reject(request.error);
     };
   });
 };

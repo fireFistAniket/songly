@@ -25,7 +25,7 @@ const VideoBackgroundComponent = ({ isStopped }) => {
         muted
       >
         {/* Replace this source URL with your video URL */}
-        <source src="/now-playing-bg-video.mp4" type="video/mp4" />
+        <source src="/songly/now-playing-bg-video.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 

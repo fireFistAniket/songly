@@ -15,7 +15,7 @@ const Auth = () => {
         <div className="flex flex-col items-center gap-2">
           <h1 className="text-4xl capitalize font-bold">welcome to </h1>
           <div className="flex items-center gap-2">
-            <img src="/logo.png" alt="logo" className="w-12 h-12" />
+            <img src="/songly/logo.png" alt="logo" className="w-12 h-12" />
             <h1 className="text-4xl capitalize font-bold">songLy</h1>
           </div>
         </div>

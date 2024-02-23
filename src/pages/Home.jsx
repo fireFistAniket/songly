@@ -28,7 +28,7 @@ const Home = ({
           audioTime={audioTime}
           setAudioTime={setAudioTime}
         />
-        <RightNav music={music} setAudio={setAudio} />
+        <RightNav music={music} setAudio={setAudio} setAudioTime={setAudioTime} />
       </div>
     </>
   );

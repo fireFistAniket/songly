@@ -9,14 +9,14 @@ const LeftNav = () => {
   return (
     <nav className="flex flex-col gap-5 my-4">
       <div className="flex items-center">
-        <img src="/logo.png" alt="logo" className="w-12 h-12" />
+        <img src="/songly/logo.png" alt="logo" className="w-12 h-12" />
         <h1 className="text-3xl capitalize font-bold bg-gradient-to-r from-red-500 via-rose-500 to-white bg-clip-text text-transparent">
           songly
         </h1>
       </div>
       <ul className="flex flex-col items-start gap-2">
         <NavLink
-          to="/"
+          to="/songly/"
           className={({ isActive }) =>
             "flex items-center gap-2 text-xl p-2 " +
             (isActive ? "text-rose-500 font-bold" : "text-inherit font-normal")
@@ -34,7 +34,7 @@ const LeftNav = () => {
           <p className="capitalize">playlist</p>
         </li>
         <NavLink
-          to="/add"
+          to="/songly/add"
           className={({ isActive }) =>
             "flex items-center gap-2 text-xl p-2 " +
             (isActive ? "text-rose-500 font-bold" : "text-inherit font-normal")

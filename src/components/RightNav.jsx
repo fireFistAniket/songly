@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../contexts/Authcontext";
 
-const RightNav = ({ music, setAudio }) => {
+const RightNav = ({ music, setAudio, setAudioTime }) => {
   const { Authstate, Authdispatch } = useContext(AuthContext);
 
   return (
@@ -9,7 +9,7 @@ const RightNav = ({ music, setAudio }) => {
       <nav className="my-4 flex flex-col items-start gap-4">
         <div className="flex items-center gap-2">
           <img
-            src="/default-dp.png"
+            src="/songly/default-dp.png"
             alt="profile pic"
             loading="lazy"
             className="w-12 h-12 rounded-full overflow-hidden"
@@ -26,9 +26,15 @@ const RightNav = ({ music, setAudio }) => {
                 <li
                   className="flex flex-col items-center gap-2"
                   key={index}
-                  onClick={() => setAudio(item)}
+                  onClick={() => {
+                    setAudio((prev) => ({
+                      ...prev,
+                      audioBlob: item.audioBlob,
+                    }));
+                    setAudioTime((prev) => ({ ...prev, audioTime: 0 }));
+                  }}
                 >
-                  <img src="/music-cover.png" alt="music cover" />
+                  <img src="/songly/music-cover.png" alt="music cover" />
                   <p className="capitalize text-lg font-semibold">
                     {item.audioBlob.musicName}
                   </p>

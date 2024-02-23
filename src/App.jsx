@@ -50,6 +50,8 @@ function App() {
         });
       } else {
         setAudio(rest);
+        const playing = await saveCurrentAudio(db, rest.audioBlob);
+        const playingTime = await saveCurrentAudioTimer(db, { audioTime: 0 });
         Musicdispatch({
           type: "CURRENTLYPLAYNGSONG",
           payload: { currentPlayingSong: rest },
@@ -66,13 +68,13 @@ function App() {
     }
   }
 
-  async function saveCurrentMusic(id, data) {
+  async function saveCurrentMusic(data) {
     const db = await initializeDB();
     try {
-      const playing = await saveCurrentAudio(db, id, data);
+      const playing = await saveCurrentAudio(db, data);
       Musicdispatch({
         type: "CURRENTLYPLAYNGSONG",
-        payload: { currentPlayingSong: id },
+        payload: { currentPlayingSong: data },
       });
       db.close();
     } catch (error) {
@@ -80,10 +82,10 @@ function App() {
     }
   }
 
-  async function saveCurrentMusicTime(id, time) {
+  async function saveCurrentMusicTime(time) {
     const db = await initializeDB();
     try {
-      const playing = await saveCurrentAudioTimer(db, id, time);
+      const playing = await saveCurrentAudioTimer(db, time);
       Musicdispatch({
         type: "CURRENTLYPLAYNGTIME",
         payload: { currentTime: time },
@@ -145,7 +147,7 @@ function App() {
     <>
       <Routes>
         <Route
-          path="/"
+          path="/songly/"
           element={
             <Home
               audio={audio}
@@ -160,7 +162,7 @@ function App() {
           }
         />
         <Route
-          path="/add"
+          path="/songly/add"
           element={
             <Addmusic
               audio={audio}

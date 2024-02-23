@@ -27,7 +27,7 @@ const Addmusic = ({ music, audio, setAudio, setIsUploaded }) => {
           musicData: new Blob([audioBlob], { type: "audio/mp3" }),
           musicName: selectedFile.name,
         });
-        setIsUploaded(false);
+        setIsUploaded(true);
         // Musicdispatch({
         //   type: "ADDMUSIC",
         //   payload: { musicData: audioUrl },
