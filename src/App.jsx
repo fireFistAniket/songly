@@ -33,11 +33,9 @@ function App() {
       Musicdispatch({ type: "SETMUSIC", payload: { musics: data } });
       const currentaudioData = await getCurrentAudio(db);
       const currentaudioTime = await getCurrentAudioTime(db);
-      console.log(currentaudioData);
       if (currentaudioData.length > 0) {
         const musicId = currentaudioData[0];
         const musicTime = currentaudioTime[0];
-        console.log(musicId);
         setAudio(musicId);
         setAudioTime(musicTime);
         Musicdispatch({
@@ -104,21 +102,31 @@ function App() {
   const handelCurrentSong = async (action) => {
     try {
       const db = await initializeDB();
-      const data = await getCurrentAudio();
-      const musicId = data[0].audioId;
+      const data = await getCurrentAudio(db);
+      const musicId = data[0].audioBlob;
       if (musicId < 0) {
         return;
       }
       if (action.type === "prev") {
-        const playIng = await getAudioById(db, musicId - 1);
-        setAudio(playIng);
+        console.log(data[0]);
+        const playIng = await getAudioById(db, musicId.id - 1);
+        setAudio((prev) => ({
+          ...prev,
+          audioBlob: playIng.audioBlob,
+        }));
+        setAudioTime((prev) => ({ ...prev, audioTime: 0 }));
         Musicdispatch({
           type: "CURRENTLYPLAYNGSONG",
           payload: { currentPlayingSong: playIng.musicData },
         });
       } else {
-        const playIng = await getAudioById(db, musicId + 1);
-        setAudio(playIng);
+        console.log(data[0]);
+        const playIng = await getAudioById(db, musicId.id + 1);
+        setAudio((prev) => ({
+          ...prev,
+          audioBlob: playIng.audioBlob,
+        }));
+        setAudioTime((prev) => ({ ...prev, audioTime: 0 }));
         Musicdispatch({
           type: "CURRENTLYPLAYNGSONG",
           payload: { currentPlayingSong: playIng.musicData },

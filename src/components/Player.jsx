@@ -32,7 +32,6 @@ const Player = ({
     } else {
       audioRef.current.play();
       setIsPlaying(true);
-      console.log(audioSrc);
       saveCurrentMusic({
         id: audioSrc.id,
         audioBlob: audioSrc.audioBlob,
@@ -99,7 +98,7 @@ const Player = ({
             <div className="flex gap-2">
               <button
                 className="p-2 rounded-full bg-blue-500 text-white"
-                onClick={() => handelCurrentSong("prev")}
+                onClick={() => handelCurrentSong({ type: "prev" })}
               >
                 <TbPlayerTrackPrevFilled />
               </button>
@@ -111,7 +110,7 @@ const Player = ({
               </button>
               <button
                 className="p-2 rounded-full bg-blue-500 text-white"
-                onClick={() => handelCurrentSong("aft")}
+                onClick={() => handelCurrentSong({ type: "aft" })}
               >
                 <TbPlayerTrackNextFilled />
               </button>

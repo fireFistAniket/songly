@@ -42,13 +42,6 @@ const RightNav = ({ music, setAudio, setAudioTime }) => {
               ))}
           </ul>
         </div>
-        {/* <div>
-          <img src="" alt="mp3 cover" />
-          <div>
-            <h3>music name</h3>
-            <p>music artist</p>
-          </div>
-        </div> */}
       </nav>
     </>
   );

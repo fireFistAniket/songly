@@ -105,6 +105,7 @@ export const getAudioById = (db, audioId) => {
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(AUDIO_STORE_NAME, "readonly");
     const store = transaction.objectStore(AUDIO_STORE_NAME);
+    console.log(audioId);
     const request = store.get(audioId);
 
     request.onsuccess = () => {
@@ -130,7 +131,6 @@ export const getCurrentAudio = (db) => {
 
     request.onsuccess = () => {
       const audioData = request.result;
-      console.log(audioData);
       if (audioData) {
         resolve(audioData);
       } else {
@@ -152,7 +152,6 @@ export const getCurrentAudioTime = (db) => {
 
     request.onsuccess = () => {
       const audioData = request.result;
-      console.log(audioData);
       if (audioData) {
         resolve(audioData);
       } else {

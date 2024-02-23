@@ -1,4 +1,6 @@
-# React + Vite
+# SongLy
+
+hosted url - https://firefistaniket.github.io/songly/
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
