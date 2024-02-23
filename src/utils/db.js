@@ -3,6 +3,7 @@ const DB_NAME = import.meta.env.VITE_DB_NAME;
 const AUDIO_STORE_NAME = "audioStore";
 const CURRENT_AUDIO_TIME = "audioTime";
 const CURRENT_AUDIO_NAME = "audioName";
+const CURRENT_AUDIO_ID = "currentId";
 
 export const initializeDB = () => {
   return new Promise((resolve, reject) => {
@@ -24,6 +25,12 @@ export const initializeDB = () => {
       }
       if (!db.objectStoreNames.contains(CURRENT_AUDIO_TIME)) {
         db.createObjectStore(CURRENT_AUDIO_TIME, {
+          keyPath: "id",
+          autoIncrement: true,
+        });
+      }
+      if (!db.objectStoreNames.contains(CURRENT_AUDIO_ID)) {
+        db.createObjectStore(CURRENT_AUDIO_ID, {
           keyPath: "id",
           autoIncrement: true,
         });
@@ -62,6 +69,21 @@ export const saveCurrentAudio = (db, audioBlob) => {
     const store = transaction.objectStore(CURRENT_AUDIO_NAME);
     // store.clear();
     const request = store.put(audioBlob);
+    request.onsuccess = () => {
+      resolve(request.result);
+    };
+    request.onerror = () => {
+      reject(request.error);
+    };
+  });
+};
+
+export const saveCurrentAudioId = (db, audioId) => {
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(CURRENT_AUDIO_ID, "readwrite");
+    const store = transaction.objectStore(CURRENT_AUDIO_ID);
+    // store.clear();
+    const request = store.put(audioId);
     request.onsuccess = () => {
       resolve(request.result);
     };
@@ -127,6 +149,27 @@ export const getCurrentAudio = (db) => {
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(CURRENT_AUDIO_NAME, "readonly");
     const store = transaction.objectStore(CURRENT_AUDIO_NAME);
+    const request = store.getAll();
+
+    request.onsuccess = () => {
+      const audioData = request.result;
+      if (audioData) {
+        resolve(audioData);
+      } else {
+        resolve(null);
+      }
+    };
+
+    request.onerror = () => {
+      reject(request.error);
+    };
+  });
+};
+
+export const getCurrentAudioId = (db) => {
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(CURRENT_AUDIO_ID, "readonly");
+    const store = transaction.objectStore(CURRENT_AUDIO_ID);
     const request = store.getAll();
 
     request.onsuccess = () => {

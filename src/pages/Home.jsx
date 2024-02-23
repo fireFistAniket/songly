@@ -13,22 +13,33 @@ const Home = ({
   saveCurrentMusicTime,
   audioTime,
   setAudioTime,
+  saveCurrrentAudioId,
+  currentAudioId,
+  setCurrentAudioId,
 }) => {
   const { Musicstate } = useContext(MusicContext);
 
   return (
     <>
-      <div className="flex justify-evenly gap-8">
+      <div className='flex justify-evenly gap-8 '>
         <LeftNav />
         <Player
+          music={music}
           audioSrc={audio}
           handelCurrentSong={handelCurrentSong}
           saveCurrentMusic={saveCurrentMusic}
           saveCurrentMusicTime={saveCurrentMusicTime}
           audioTime={audioTime}
           setAudioTime={setAudioTime}
+          saveCurrrentAudioId={saveCurrrentAudioId}
+          currentAudioId={currentAudioId}
+          setCurrentAudioId={setCurrentAudioId}
         />
-        <RightNav music={music} setAudio={setAudio} setAudioTime={setAudioTime} />
+        <RightNav
+          music={music}
+          setAudio={setAudio}
+          setAudioTime={setAudioTime}
+        />
       </div>
     </>
   );

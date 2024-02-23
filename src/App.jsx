@@ -8,9 +8,11 @@ import {
   getAllAudio,
   getAudioById,
   getCurrentAudio,
+  getCurrentAudioId,
   getCurrentAudioTime,
   initializeDB,
   saveCurrentAudio,
+  saveCurrentAudioId,
   saveCurrentAudioTimer,
 } from "./utils/db";
 import { MusicContext } from "./contexts/MusicContext";
@@ -21,6 +23,7 @@ function App() {
   const [music, setMusic] = useState([]);
   const [audio, setAudio] = useState({});
   const [audioTime, setAudioTime] = useState({});
+  const [currentAudioId, setCurrentAudioId] = useState({});
   const { Authstate, Authdispatch } = useContext(AuthContext);
   const { Musicstate, Musicdispatch } = useContext(MusicContext);
 
@@ -33,11 +36,14 @@ function App() {
       Musicdispatch({ type: "SETMUSIC", payload: { musics: data } });
       const currentaudioData = await getCurrentAudio(db);
       const currentaudioTime = await getCurrentAudioTime(db);
+      const currentaudioId = await getCurrentAudioId(db);
       if (currentaudioData.length > 0) {
         const musicId = currentaudioData[0];
         const musicTime = currentaudioTime[0];
+        const currentId = currentaudioId[0];
         setAudio(musicId);
         setAudioTime(musicTime);
+        setCurrentAudioId(currentId);
         Musicdispatch({
           type: "CURRENTLYPLAYNGSONG",
           payload: { currentPlayingSong: musicId },
@@ -50,6 +56,7 @@ function App() {
         setAudio(rest);
         const playing = await saveCurrentAudio(db, rest.audioBlob);
         const playingTime = await saveCurrentAudioTimer(db, { audioTime: 0 });
+        const playingId = await saveCurrentAudioId(db, { audioId: 0 });
         Musicdispatch({
           type: "CURRENTLYPLAYNGSONG",
           payload: { currentPlayingSong: rest },
@@ -80,6 +87,16 @@ function App() {
     }
   }
 
+  async function saveCurrrentAudioId(data) {
+    const db = await initializeDB();
+    try {
+      const playingId = await saveCurrentAudioId(db, data);
+      db.close();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async function saveCurrentMusicTime(time) {
     const db = await initializeDB();
     try {
@@ -97,7 +114,7 @@ function App() {
   useEffect(() => {
     getMusic();
     setIsUploaded(false);
-  }, [isSigned, isUploaded]);
+  }, [isSigned, isUploaded, audio]);
 
   const handelCurrentSong = async (action) => {
     try {
@@ -108,11 +125,10 @@ function App() {
         return;
       }
       if (action.type === "prev") {
-        console.log(data[0]);
-        const playIng = await getAudioById(db, musicId.id - 1);
+        const playIng = await getAudioById(db, currentAudioId.audioId - 1);
         setAudio((prev) => ({
           ...prev,
-          audioBlob: playIng.audioBlob,
+          audioBlob: playIng.musicData,
         }));
         setAudioTime((prev) => ({ ...prev, audioTime: 0 }));
         Musicdispatch({
@@ -120,11 +136,10 @@ function App() {
           payload: { currentPlayingSong: playIng.musicData },
         });
       } else {
-        console.log(data[0]);
-        const playIng = await getAudioById(db, musicId.id + 1);
+        const playIng = await getAudioById(db, currentAudioId.audioId + 1);
         setAudio((prev) => ({
           ...prev,
-          audioBlob: playIng.audioBlob,
+          audioBlob: playIng.musicData,
         }));
         setAudioTime((prev) => ({ ...prev, audioTime: 0 }));
         Musicdispatch({
@@ -155,7 +170,7 @@ function App() {
     <>
       <Routes>
         <Route
-          path="/songly/"
+          path='/songly/'
           element={
             <Home
               audio={audio}
@@ -166,11 +181,14 @@ function App() {
               saveCurrentMusicTime={saveCurrentMusicTime}
               audioTime={audioTime}
               setAudioTime={setAudioTime}
+              saveCurrrentAudioId={saveCurrrentAudioId}
+              currentAudioId={currentAudioId}
+              setCurrentAudioId={setCurrentAudioId}
             />
           }
         />
         <Route
-          path="/songly/add"
+          path='/songly/add'
           element={
             <Addmusic
               audio={audio}
