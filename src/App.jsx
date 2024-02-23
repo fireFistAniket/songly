@@ -54,9 +54,11 @@ function App() {
         });
       } else {
         setAudio(rest);
-        const playing = await saveCurrentAudio(db, rest.audioBlob);
+        const playing = await saveCurrentAudio(db, {
+          audioBlob: {},
+        });
         const playingTime = await saveCurrentAudioTimer(db, { audioTime: 0 });
-        const playingId = await saveCurrentAudioId(db, { audioId: 0 });
+        const playingId = await saveCurrentAudioId(db, { audioId: 1 });
         Musicdispatch({
           type: "CURRENTLYPLAYNGSONG",
           payload: { currentPlayingSong: rest },
@@ -114,7 +116,7 @@ function App() {
   useEffect(() => {
     getMusic();
     setIsUploaded(false);
-  }, [isSigned, isUploaded, audio]);
+  }, [isSigned, isUploaded]);
 
   const handelCurrentSong = async (action) => {
     try {
@@ -125,26 +127,40 @@ function App() {
         return;
       }
       if (action.type === "prev") {
-        const playIng = await getAudioById(db, currentAudioId.audioId - 1);
+        let count;
+        if (currentAudioId.audioId === 1) {
+          count = music.length;
+        } else {
+          count = currentAudioId.audioId - 1;
+        }
+        console.log(music.length);
+        const playIng = await getAudioById(db, count);
         setAudio((prev) => ({
           ...prev,
-          audioBlob: playIng.musicData,
+          audioBlob: playIng,
         }));
         setAudioTime((prev) => ({ ...prev, audioTime: 0 }));
         Musicdispatch({
           type: "CURRENTLYPLAYNGSONG",
-          payload: { currentPlayingSong: playIng.musicData },
+          payload: { currentPlayingSong: playIng },
         });
       } else {
-        const playIng = await getAudioById(db, currentAudioId.audioId + 1);
+        let count;
+        if (currentAudioId.audioId === music.length) {
+          count = 1;
+        } else {
+          count = currentAudioId.audioId + 1;
+        }
+        console.log(music.length);
+        const playIng = await getAudioById(db, count);
         setAudio((prev) => ({
           ...prev,
-          audioBlob: playIng.musicData,
+          audioBlob: playIng,
         }));
         setAudioTime((prev) => ({ ...prev, audioTime: 0 }));
         Musicdispatch({
           type: "CURRENTLYPLAYNGSONG",
-          payload: { currentPlayingSong: playIng.musicData },
+          payload: { currentPlayingSong: playIng },
         });
       }
       db.close();
@@ -170,7 +186,7 @@ function App() {
     <>
       <Routes>
         <Route
-          path='/songly/'
+          path="/songly/"
           element={
             <Home
               audio={audio}
@@ -188,7 +204,7 @@ function App() {
           }
         />
         <Route
-          path='/songly/add'
+          path="/songly/add"
           element={
             <Addmusic
               audio={audio}

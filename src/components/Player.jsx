@@ -26,6 +26,7 @@ const Player = ({
   const [audioUrl, setAudioUrl] = useState(null);
 
   const handlePlayPause = () => {
+    console.log(audioSrc);
     if (isPlaying) {
       audioRef.current.pause();
       saveCurrentMusicTime({
@@ -40,13 +41,13 @@ const Player = ({
         id: audioSrc.id,
         audioBlob: audioSrc.audioBlob,
       });
+
       let uploadId;
       music.forEach((item, index) => {
         if (areObjectsEqual(item.audioBlob, audioSrc.audioBlob)) {
           uploadId = item.id;
         }
       });
-      console.log(uploadId);
       saveCurrrentAudioId({ id: currentAudioId.id, audioId: uploadId });
     }
     setIsPlaying(!isPlaying);
@@ -94,6 +95,8 @@ const Player = ({
     };
   }, [audioRef.current, audioSrc]);
 
+  useEffect(() => {}, []);
+
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
@@ -105,34 +108,34 @@ const Player = ({
 
   return (
     <>
-      <section className='border-l border-r w-[45vw] px-6 m-4 flex flex-col gap-6'>
+      <section className="border-l border-r w-[45vw] px-6 m-4 flex flex-col gap-6">
         <HeaderSearch />
         <VideoBackgroundComponent isStopped={!isPlaying} />
-        <div className='p-4 bg-gray-200 rounded-md shadow-md'>
+        <div className="p-4 bg-gray-200 rounded-md shadow-md">
           <audio ref={audioRef} src={audioUrl} />
-          <div className='flex items-center justify-between'>
-            <div className='flex gap-2'>
+          <div className="flex items-center justify-between">
+            <div className="flex gap-2">
               <button
-                className='p-2 rounded-full bg-blue-500 text-white'
+                className="p-2 rounded-full bg-blue-500 text-white"
                 onClick={() => handelCurrentSong({ type: "prev" })}
               >
                 <TbPlayerTrackPrevFilled />
               </button>
               <button
-                className='p-2 rounded-full bg-blue-500 text-white'
+                className="p-2 rounded-full bg-blue-500 text-white"
                 onClick={handlePlayPause}
               >
                 {isPlaying ? <FaCirclePause /> : <FaPlay />}
               </button>
               <button
-                className='p-2 rounded-full bg-blue-500 text-white'
+                className="p-2 rounded-full bg-blue-500 text-white"
                 onClick={() => handelCurrentSong({ type: "aft" })}
               >
                 <TbPlayerTrackNextFilled />
               </button>
             </div>
-            <div className='flex items-center space-x-2'>
-              <span className='text-gray-600'>{formatTime(currentTime)}</span>
+            <div className="flex items-center space-x-2">
+              <span className="text-gray-600">{formatTime(currentTime)}</span>
               <div className={`w-80 h-1 bg-gray-400 rounded-full`}>
                 <div
                   className={`h-full bg-blue-500 rounded-full`}
@@ -141,7 +144,7 @@ const Player = ({
                   }}
                 ></div>
               </div>
-              <span className='text-gray-600'>{formatTime(duration)}</span>
+              <span className="text-gray-600">{formatTime(duration)}</span>
             </div>
           </div>
         </div>

@@ -18,43 +18,41 @@ const RightNav = ({ music, setAudio, setAudioTime }) => {
 
   return (
     <>
-      <nav className='my-4 flex flex-col items-start gap-4'>
-        <div className='flex items-center gap-2 justify-between w-full'>
+      <nav className="my-4 flex flex-col items-start gap-4">
+        <div className="flex items-center gap-2 justify-between w-full">
           <img
-            src='/songly/default-dp.png'
-            alt='profile pic'
-            loading='lazy'
-            className='w-12 h-12 rounded-full overflow-hidden'
+            src="/songly/default-dp.png"
+            alt="profile pic"
+            loading="lazy"
+            className="w-12 h-12 rounded-full overflow-hidden"
           />
-          <h1 className='text-2xl capitalize font-bold text-white'>
+          <h1 className="text-2xl capitalize font-bold text-white">
             {Authstate.userName}
           </h1>
           <button
-            type='button'
-            className='relative right-0 text-2xl'
+            type="button"
+            className="relative right-0 text-2xl"
             onClick={handelClearOut}
           >
             <FaPowerOff />
           </button>
         </div>
-        <div className='flex gap-4 flex-col'>
-          <h2 className='text-xl capitalize font-semibold'>songs</h2>
-          <ul className='overflow-y-scroll h-[40vw]'>
+        <div className="flex gap-4 flex-col">
+          <h2 className="text-xl capitalize font-semibold">songs</h2>
+          <ul className="overflow-y-scroll h-[40vw]">
             {music.length > 0 &&
               music.map((item, index) => (
                 <li
-                  className='flex flex-col items-center gap-2 cursor-pointer'
+                  className="flex flex-col items-center gap-2 cursor-pointer"
                   key={index}
                   onClick={() => {
-                    setAudio((prev) => ({
-                      ...prev,
-                      audioBlob: item.audioBlob,
-                    }));
-                    setAudioTime((prev) => ({ ...prev, audioTime: 0 }));
+                    console.log(item.audioBlob);
+                    setAudio(item);
+                    setAudioTime((prev) => ({ ...prev, audioTime: index + 1 }));
                   }}
                 >
-                  <img src='/songly/music-cover.png' alt='music cover' />
-                  <p className='capitalize text-lg font-semibold'>
+                  <img src="/songly/music-cover.png" alt="music cover" />
+                  <p className="capitalize text-lg font-semibold">
                     {item.audioBlob.musicName}
                   </p>
                 </li>
